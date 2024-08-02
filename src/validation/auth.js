@@ -1,14 +1,29 @@
 import Joi from 'joi';
+import { emailValidation } from '../constants/index.js';
+
 
 export const registerUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
-  // repeatPassword: Joi.string().min(8).required(), треба? чи тільки на фронті?
 });
 
-// в регістер ПОТРІБНА ВАЛІДАЦІЯ EMAIL ?????
 
 export const loginUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
+  email: Joi.string().pattern(emailValidation).required().messages({
+    'string.pattern.base': 'Invalid email format'
+  }),
+  password: Joi.string().min(8).max(22).required(),
+});
+
+
+export const emailUserSchema = Joi.object({
+  email: Joi.string().pattern(emailValidation).required().messages({
+    'string.pattern.base': 'Invalid email format'
+  })
+});
+
+
+export const passwordUserSchema = Joi.object({
+  resetToken: Joi.string().required(),
+  password: Joi.string().min(8).max(22).required(),
 });

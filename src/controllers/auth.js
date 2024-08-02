@@ -1,5 +1,3 @@
-import createHttpError from 'http-errors';
-
 import { registerUser } from '../services/auth.js';
 import { loginUser } from '../services/auth.js';
 import { logoutUser } from '../services/auth.js';
@@ -21,31 +19,36 @@ export const registerUserController = async (req, res, next) => {
   }
 };
 
-
 // login
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+export const loginUserController = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-  if (!session) throw createHttpError(500, 'Failed to create session');
+    const { user, session } = await loginUser(email, password);
 
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
+    res.cookie('refreshToken', session.refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
+    res.cookie('sessionId', session._id.toString(), {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
 
-  res.json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
+      res.json({
+      email: user.email,
+      name: user.name,
+      gender: user.gender,
+      weight: user.weight,
+      dailyTimeActivity: user.dailyTimeActivity,
+      dailyNorma: user.dailyNorma,
+      avatar: user.avatar,
+    });
+
+  } catch (error) {
+    next(error);
+  }
 };
-
 
 // logout
 export const logoutUserController = async (req, res) => {
@@ -91,4 +94,3 @@ export const refreshUserSessionController = async (req, res) => {
     },
   });
 };
-
