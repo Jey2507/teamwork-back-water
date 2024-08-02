@@ -9,8 +9,6 @@ import {
 import { refreshUserSessionController } from '../controllers/auth.js';
 import  ctrlWrapper  from '../utils/ctrlWrapper.js';
 
-// import { authenticate } from '../middlewares/authenticate.js'; // коли робити ? при рефреш, при гет на персональні дані та апдейт????
-
 const authRouter = Router();
 
 authRouter.post(
