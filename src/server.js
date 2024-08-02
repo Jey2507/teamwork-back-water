@@ -1,11 +1,12 @@
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 
 import notFoundHanler from "./middlewares/notFoundHandler.js";
 import errorHandler from "./middlewares/errorHandler.js";
-
 import { env } from "./utils/env.js";
+import router from './routers/index.js';
 
 const PORT = env("PORT", "3003");
 
@@ -23,9 +24,16 @@ export const setupServer = () => {
           }),
     );
 
+    app.use(cookieParser());
+    
+    // app.use('/api', router);
+    app.use('/', router);
+
+
     app.use(errorHandler);
     app.use(notFoundHanler);
-   
+
+
     app.listen(PORT,() => {
         console.log(`Server is running on port ${PORT}`);
     });
