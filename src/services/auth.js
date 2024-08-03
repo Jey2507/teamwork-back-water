@@ -58,9 +58,9 @@ export const loginUser = async (email, password) => {
   const isEqual = await bcrypt.compare(password, user.password);
   if (!isEqual) throw createHttpError(401, 'Unauthorized');
 
-  if (!user.isVerified) {
-    throw createHttpError(400, 'Email is not verified');
-  }
+  // if (!user.isVerified) {
+  //   throw createHttpError(400, 'Email is not verified');
+  // }
 
   const payload = { id: user._id };
   const { token, refreshToken } = generateTokens(payload);
@@ -76,7 +76,7 @@ export const loginUser = async (email, password) => {
     refreshTokenValidUntil: new Date(Date.now() + THIRTY_DAYS),
   });
 
-  return { user, session };
+  return { user, session, token };
 };
 
 // logout
@@ -95,7 +95,7 @@ const createSession = () => {
 };
 
 
-// refresh
+// refresh session
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   const session = await Session.findOne({ _id: sessionId, refreshToken });
 
@@ -113,6 +113,4 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
 
   return await Session.create({ userId: session.userId, ...newSession });
 };
-
-
 

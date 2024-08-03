@@ -1,5 +1,4 @@
 import createHttpError from 'http-errors';
-
 import { Session } from '../db/models/Session.js';
 import { User } from '../db/models/User.js';
 
@@ -31,6 +30,7 @@ export const authenticate = async (req, res, next) => {
 
     if (isAccessTokenExpired) {
       next(createHttpError(401, 'Access token expired'));
+      return;
     }
 
     const user = await User.findById(session.userId);

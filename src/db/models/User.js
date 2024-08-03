@@ -34,7 +34,7 @@ const userSchema = new Schema(
         },
         avatar: {
           type: String,
-          default: null
+          default: 'https://console.cloudinary.com/console/c-60c0f1e47a419ccf36eae30da18427/media_library/search?sortDirection=desc&sortField=_score&search_id=my_uploads&view_mode=mosaic&q='
         },
         token: {
           type: String,
@@ -44,10 +44,10 @@ const userSchema = new Schema(
           type: String,
           default: null,
         },
-        isVerified: {
-          type: Boolean,
-          default: false,
-        },
+        // isVerified: {
+        //   type: Boolean,
+        //   default: false,
+        // },
          },
   { timestamps: true, versionKey: false },
 );
