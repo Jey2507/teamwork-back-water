@@ -19,6 +19,7 @@ export const registerUserController = async (req, res, next) => {
   }
 };
 
+
 // login
 export const loginUserController = async (req, res, next) => {
   try {
@@ -50,6 +51,7 @@ export const loginUserController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // logout
 export const logoutUserController = async (req, res) => {

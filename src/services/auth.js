@@ -58,10 +58,6 @@ export const loginUser = async (email, password) => {
   const isEqual = await bcrypt.compare(password, user.password);
   if (!isEqual) throw createHttpError(401, 'Unauthorized');
 
-  // if (!user.isVerified) {
-  //   throw createHttpError(400, 'Email is not verified');
-  // }
-
   const payload = { id: user._id };
   const { token, refreshToken } = generateTokens(payload);
 

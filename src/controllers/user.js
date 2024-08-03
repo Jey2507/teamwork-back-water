@@ -5,32 +5,13 @@ import {saveFileToUploadDir} from '../utils/saveFileToUploadDir.js';
 import { getUser } from '../services/user.js';
 
 // get current user info
-// export const getUserController = async (req, res, next) => {
-//   try {
-//     const email = req.user.email;
-//     const user = await getUser(email);
-
-//     res.json({
-//       email: user.email,
-//       name: user.name,
-//       gender: user.gender,
-//       weight: user.weight,
-//       dailyTimeActivity: user.dailyTimeActivity,
-//       dailyNorma: user.dailyNorma,
-//       avatar: user.avatar,
-//       isVerified: user.isVerified,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const getUserController = async (req, res, next) => {
   try {
-       const query = req.query;
-    const user = await getUser(query);
-
-    res.json({
+    const user = req.user;
+    if (!user) {
+      return next(createHttpError(404, 'User not found'));
+    }
+    res.status(200).json({
       email: user.email,
       name: user.name,
       gender: user.gender,
@@ -38,10 +19,9 @@ export const getUserController = async (req, res, next) => {
       dailyTimeActivity: user.dailyTimeActivity,
       dailyNorma: user.dailyNorma,
       avatar: user.avatar,
-      isVerified: user.isVerified,
     });
   } catch (error) {
-    next(error);
+    next(createHttpError(500, 'Internal Server Error'));
   }
 };
 
