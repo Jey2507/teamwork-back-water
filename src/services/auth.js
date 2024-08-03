@@ -61,9 +61,9 @@ export const loginUser = async (email, password) => {
   const payload = { id: user._id };
   const { token, refreshToken } = generateTokens(payload);
 
-  await updateTokensForUser(user._id, token, refreshToken);
 
-  await Session.deleteOne({ userId: user._id });
+  await Session.deleteMany({ userId: user._id });
+
   const session = await Session.create({
     userId: user._id,
     accessToken: token,

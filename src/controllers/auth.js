@@ -36,7 +36,7 @@ export const loginUserController = async (req, res, next) => {
       expires: new Date(Date.now() + ONE_DAY),
     });
 
-      res.json({
+    res.json({
       email: user.email,
       name: user.name,
       gender: user.gender,
@@ -44,15 +44,14 @@ export const loginUserController = async (req, res, next) => {
       dailyTimeActivity: user.dailyTimeActivity,
       dailyNorma: user.dailyNorma,
       avatar: user.avatar,
-      token
+      token,
+      refreshToken: session.refreshToken,
     });
 
   } catch (error) {
     next(error);
   }
 };
-
-
 // logout
 export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId) {

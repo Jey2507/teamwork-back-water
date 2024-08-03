@@ -2,7 +2,6 @@ import createHttpError from 'http-errors';
 import { updateUser } from '../services/user.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import {saveFileToUploadDir} from '../utils/saveFileToUploadDir.js';
-import { getUser } from '../services/user.js';
 
 // get current user info
 export const getUserController = async (req, res, next) => {
@@ -21,7 +20,7 @@ export const getUserController = async (req, res, next) => {
       avatar: user.avatar,
     });
   } catch (error) {
-    next(createHttpError(500, 'Internal Server Error'));
+    next(createHttpError(500, error, 'Internal Server Error'));
   }
 };
 
