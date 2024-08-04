@@ -27,6 +27,6 @@ export const authenticate = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    next(createHttpError(500, error, 'Internal Server Error'));
+    next(createHttpError(500, 'Internal Server Error'));
   }
 };

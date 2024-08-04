@@ -28,7 +28,6 @@ export const loginUserController = async (req, res, next) => {
     const { email, password } = req.body;
 
     const { user, session, token } = await loginUser(email, password);
-
     res.cookie('refreshToken', session.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + ONE_DAY),
@@ -37,7 +36,6 @@ export const loginUserController = async (req, res, next) => {
       httpOnly: true,
       expires: new Date(Date.now() + ONE_DAY),
     });
-
     res.json({
       email: user.email,
       name: user.name,
@@ -47,14 +45,12 @@ export const loginUserController = async (req, res, next) => {
       dailyNorma: user.dailyNorma,
       avatar: user.avatar,
       token,
-      refreshToken: session.refreshToken,
     });
 
   } catch (error) {
     next(error);
   }
 };
-
 
 // logout
 export const logoutUserController = async (req, res) => {

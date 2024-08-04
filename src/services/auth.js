@@ -27,7 +27,8 @@ export const generateTokens = (payload) => {
   return { token, refreshToken };
 };
 
-export const updateTokensForUser = async (userId, token, refreshToken) => {
+
+export const updateTokens = async (userId, token, refreshToken) => {
   return await User.findByIdAndUpdate(userId, { token, refreshToken });
 };
 
@@ -39,15 +40,15 @@ export const registerUser = async (payload) => {
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
   const user = await User.create({
-      ...payload,
-      password: encryptedPassword,
-      isVerified: true,
+    ...payload,
+    password: encryptedPassword,
+    isVerified: true,
   });
 
   const payloadForTokens = { id: user._id };
   const { token, refreshToken } = generateTokens(payloadForTokens);
 
-  await updateTokensForUser(user._id, token, refreshToken);
+  await updateTokens(user._id, token, refreshToken);
 
   await sendEmail({
     to: user.email,
@@ -55,9 +56,12 @@ export const registerUser = async (payload) => {
     html: 'Hello! You registered successfully',
   });
 
-  return { ...user.toObject(), token, refreshToken };
-};
+  const userObject = user.toObject();
+  delete userObject.password;
+  delete userObject.refreshToken;
 
+  return { ...userObject, token };
+};
 
 // login
 export const loginUser = async (email, password) => {
@@ -70,7 +74,6 @@ export const loginUser = async (email, password) => {
   const payload = { id: user._id };
   const { token, refreshToken } = generateTokens(payload);
 
-
   await Session.deleteMany({ userId: user._id });
 
   const session = await Session.create({
@@ -82,8 +85,8 @@ export const loginUser = async (email, password) => {
   });
 
   return { user, session, token };
-};
 
+};
 
 // logout
 export const logoutUser = async (sessionId) => {
