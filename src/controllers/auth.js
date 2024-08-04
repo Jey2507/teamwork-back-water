@@ -53,16 +53,19 @@ export const loginUserController = async (req, res, next) => {
 };
 
 // logout
-export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
 
-    console.log('User logged out successfully');
+export const logoutUserController = async (req, res, next) => {
+  try {
+    if (req.cookies.sessionId) {
+      await logoutUser(req.cookies.sessionId);
+    }
+    res.clearCookie('sessionId');
+    res.clearCookie('refreshToken');
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
   }
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
 };
 
 
