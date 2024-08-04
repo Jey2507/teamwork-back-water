@@ -37,7 +37,8 @@ export const loginUserController = async (req, res, next) => {
     res.status(200).json({
       status: 200,
       message: 'Successfully logged in a user!',
-      email: user.email,
+      data:
+      {email: user.email,
       name: user.name,
       gender: user.gender,
       weight: user.weight,
@@ -45,6 +46,7 @@ export const loginUserController = async (req, res, next) => {
       dailyNorma: user.dailyNorma,
       avatar: user.avatar,
       token,
+      }
     });
   } catch (error) {
     next(error);
