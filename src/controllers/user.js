@@ -3,6 +3,7 @@ import { updateUser } from '../services/user.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import {saveFileToUploadDir} from '../utils/saveFileToUploadDir.js';
 
+
 // get current user info
 export const getUserController = async (req, res, next) => {
   try {
@@ -24,8 +25,7 @@ export const getUserController = async (req, res, next) => {
   }
 };
 
-
-// update current user info
+ // update current user info
 export const patchUserController = async (req, res, next) => {
     const userId = req.user._id;
     const { name, email, gender, weight, dailyTimeActivity, dailyNorma, avatar } = req.body;

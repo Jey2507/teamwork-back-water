@@ -27,3 +27,14 @@ export const passwordUserSchema = Joi.object({
   resetToken: Joi.string().required(),
   password: Joi.string().min(8).max(22).required(),
 });
+
+
+export const requestResetEmailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+
+export const resetPasswordSchema = Joi.object({
+  password: Joi.string().required(),
+  token: Joi.string().required(),
+});

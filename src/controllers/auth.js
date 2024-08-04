@@ -3,6 +3,8 @@ import { loginUser } from '../services/auth.js';
 import { logoutUser } from '../services/auth.js';
 import { refreshUserSession } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
+import { requestResetToken } from '../services/auth.js';
+import { resetPassword } from '../services/auth.js';
 
 
 // register
@@ -52,6 +54,8 @@ export const loginUserController = async (req, res, next) => {
     next(error);
   }
 };
+
+
 // logout
 export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId) {
@@ -95,4 +99,41 @@ export const refreshUserSessionController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+
+// token reset in email
+export const requestResetEmailController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log('Request received to send reset email for:', email);
+
+    const token = await requestResetToken(email);
+
+    res.json({ message: 'Password reset email sent successfully', token });
+  } catch (error) {
+    res.status(error.status || 500).json({
+      status: error.status || 500,
+      message: error.message || 'Something went wrong',
+    });
+  }
+};
+
+
+// reset pwd
+export const resetPasswordController = async (req, res) => {
+  try {
+    await resetPassword(req.body);
+    res.json({
+      message: 'Password was successfully reset!',
+      status: 200,
+      data: {},
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: 'Something went wrong',
+      data: error.message,
+    });
+  }
 };

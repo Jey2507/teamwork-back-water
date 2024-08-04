@@ -6,6 +6,10 @@ import { Session } from '../db/models/Session.js';
 import { randomBytes } from 'crypto';
 import { User } from '../db/models/User.js';
 import { sendEmail } from '../utils/sendMail.js';
+import handlebars from 'handlebars';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 // authorization
@@ -45,10 +49,15 @@ export const registerUser = async (payload) => {
 
   await updateTokensForUser(user._id, token, refreshToken);
 
-  await sendEmail(user.email, 'Welcome to AquaTrack!', 'Hello! You registered successfully');
+  await sendEmail({
+    to: user.email,
+    subject: 'Welcome to AquaTrack!',
+    html: 'Hello! You registered successfully',
+  });
 
   return { ...user.toObject(), token, refreshToken };
 };
+
 
 // login
 export const loginUser = async (email, password) => {
@@ -74,6 +83,7 @@ export const loginUser = async (email, password) => {
 
   return { user, session, token };
 };
+
 
 // logout
 export const logoutUser = async (sessionId) => {
@@ -110,3 +120,65 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   return await Session.create({ userId: session.userId, ...newSession });
 };
 
+
+//  token reset in email
+export const requestResetToken = async (email) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    const resetToken = jwt.sign(
+      { sub: user._id, email },
+      process.env.JWT_SECRET,
+      { expiresIn: '30m' }
+    );
+
+    const resetPasswordTemplatePath = `${process.env.APP_DOMAIN}/reset-password?token=${resetToken}`;
+
+    const template = handlebars.compile(`<p>Click <a href="${resetPasswordTemplatePath}">here</a> to reset your password!</p>`);
+    const html = template({ name: user.name });
+
+    await sendEmail({
+      to: email,
+      subject: 'Reset your password',
+      html,
+    });
+
+    return resetToken;
+  } catch (error) {
+    console.error('Error in requestResetToken:', error.message);
+    throw createHttpError(500, 'Failed to send the email, please try again later.');
+  }
+};
+
+
+// pwd reset
+export const resetPassword = async (payload) => {
+  let entries;
+
+  try {
+    entries = jwt.verify(payload.token, process.env.JWT_SECRET);
+      } catch (err) {
+
+    if (err instanceof Error) throw createHttpError(401, 'Token is expired or invalid.');
+    throw err;
+  }
+
+  const user = await User.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+
+  await User.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+};
