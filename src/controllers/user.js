@@ -12,6 +12,8 @@ export const getUserController = async (req, res, next) => {
       return next(createHttpError(404, 'User not found'));
     }
     res.status(200).json({
+      status: 200,
+      message: 'User retrieved successfully',
       email: user.email,
       name: user.name,
       gender: user.gender,
@@ -69,7 +71,7 @@ export const patchUserController = async (req, res, next) => {
 
       res.status(200).json({
         status: 200,
-        message: 'Successfully updated user!',
+        message: 'Successfully updated a user!',
         data: result,
       });
     } catch (error) {
