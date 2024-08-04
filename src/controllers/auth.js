@@ -102,10 +102,12 @@ export const requestResetEmailController = async (req, res) => {
   try {
     const { email } = req.body;
     console.log('Request received to send reset email for:', email);
-    const token = await requestResetToken(email);
+    await requestResetToken(email);
+
     res.status(200).json({
       status: 200,
-      message: 'Password reset email sent successfully', token });
+      message: 'Password reset email sent successfully'
+    });
   } catch (error) {
     res.status(error.status || 500).json({
       status: error.status || 500,
@@ -113,7 +115,6 @@ export const requestResetEmailController = async (req, res) => {
     });
   }
 };
-
 // reset pwd
 export const resetPasswordController = async (req, res) => {
   try {
