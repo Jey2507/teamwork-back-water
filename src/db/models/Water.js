@@ -16,7 +16,8 @@ const waterSchema = new Schema({
         ref: 'user',
         required: true,
       },
-});
+},
+{ timestamps: true, versionKey: false },);
 
-const WaterConsumption = model('WaterConsumption', waterSchema);
-export default WaterConsumption;
+const Water = model('waters', waterSchema);
+export default Water;

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import WaterConsumption from '../db/models/Water.js';
+import Water from '../db/models/Water.js';
 import moment from 'moment';
 
 //  - - - - - - - - -CREATE WATER- - - - - - - - - 
 
 export const addWater = async (userId, date, amount) => {
-    return await WaterConsumption.create({
+    return await Water.create({
       userId: userId,
       date: date,
       amount,
@@ -17,7 +17,7 @@ export const addWater = async (userId, date, amount) => {
   //  - - - - - - - - -DELETE WATER- - - - - - - - - 
 
   export const deleteWater = async (userId, id) => {
-    return await WaterConsumption.findOneAndDelete({
+    return await Water.findOneAndDelete({
       _id: id,
       userId: userId,
     });
@@ -32,7 +32,7 @@ export const addWater = async (userId, date, amount) => {
       throw new Error('Invalid ID format');
     }
   
-    const mutableElement = await WaterConsumption.findOne({
+    const mutableElement = await Water.findOne({
       _id: new mongoose.Types.ObjectId(id),
       userId: new mongoose.Types.ObjectId(userId),
     });
@@ -62,7 +62,7 @@ export const addWater = async (userId, date, amount) => {
       amount: amount !== undefined ? amount : mutableElement.amount,
     };
   
-    return await WaterConsumption.findByIdAndUpdate(
+    return await Water.findByIdAndUpdate(
       id,
       { $set: updateFields },
       { new: true }
@@ -77,7 +77,7 @@ export const addWater = async (userId, date, amount) => {
     const startOfDay = moment(date).startOf('day').toDate();
     const endOfDay = moment(date).endOf('day').toDate();
   
-    const waterData = await WaterConsumption.find({
+    const waterData = await Water.find({
       userId: userId,
       date: {
         $gte: startOfDay,
@@ -96,7 +96,7 @@ export const addWater = async (userId, date, amount) => {
     const startOfMonth = moment(date).startOf('month').toDate();
     const endOfMonth = moment(date).endOf('month').toDate();
   
-    const waterData = await WaterConsumption.find({
+    const waterData = await Water.find({
       userId: userId,
       date: {
         $gte: startOfMonth,
