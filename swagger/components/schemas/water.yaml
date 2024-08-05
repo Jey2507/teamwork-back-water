@@ -1,0 +1,20 @@
+type: object
+required:
+  - date
+  - amount
+  - userId
+properties:
+  date:
+    description: "Date when the water entry was created"
+    type: string
+    format: date-time
+    example: '2024-08-05T12:00:00Z'
+  amount:
+    description: "Amount of water consumed"
+    type: number
+    example: 500
+  userId:
+    description: "ID of the user associated with this water entry"
+    type: string
+    format: uuid
+    example: '60d0fe4f5311236168a109ca'

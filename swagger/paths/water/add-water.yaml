@@ -1,0 +1,57 @@
+tags:
+  - Water
+summary: Add Water Consumption
+operationId: addWater
+description: Add a new entry for water consumption.
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - date
+          - amount
+        properties:
+          date:
+            type: string
+            format: date-time
+            example: '2024-08-04T10:00:00Z'
+          amount:
+            type: number
+            example: 500
+responses:
+  '201':
+    description: Water consumption added successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully added water consumption!
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 64e8b1c9e50f3f1234567890
+                date:
+                  type: string
+                  format: date-time
+                  example: '2024-08-04T10:00:00Z'
+                amount:
+                  type: number
+                  example: 500
+                userId:
+                  type: string
+                  example: 64e8b1c9e50f3f1234567890
+  '400':
+    description: Invalid input.
+  '500':
+    description: Internal server error.

@@ -1,0 +1,61 @@
+tags:
+  - Water
+summary: Update Water Consumption
+operationId: updateWater
+description: Update an existing entry for water consumption.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 64e8b1c9e50f3f1234567890
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          date:
+            type: string
+            format: date-time
+            example: '2024-08-04T10:00:00Z'
+          amount:
+            type: number
+            example: 600
+responses:
+  '200':
+    description: Water consumption updated successfully.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully updated amount of water!
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 64e8b1c9e50f3f1234567890
+                date:
+                  type: string
+                  format: date-time
+                  example: '2024-08-04T10:00:00Z'
+                amount:
+                  type: number
+                  example: 600
+                userId:
+                  type: string
+                  example: 64e8b1c9e50f3f1234567890
+  '404':
+    description: Entry not found.
+  '500':
+    description: Internal server error.
