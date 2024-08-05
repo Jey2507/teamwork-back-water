@@ -11,7 +11,44 @@ const userSchema = new Schema(
           required: [true, 'Email is required'],
           unique: true,
         },
-     },
+        name: {
+          type: String,
+          default: "User",
+        },
+        gender: {
+          type: String,
+          enum: ['male', 'female'],
+          default: "female",
+        },
+        weight: {
+          type: Number,
+          default: 0,
+        },
+        dailyTimeActivity: {
+          type: Number,
+          default: 0,
+        },
+        dailyNorma: {
+          type: Number,
+          default: 1.5,
+        },
+        avatar: {
+          type: String,
+          default: 'https://console.cloudinary.com/console/c-60c0f1e47a419ccf36eae30da18427/media_library/search?sortDirection=desc&sortField=_score&search_id=my_uploads&view_mode=mosaic&q='
+        },
+        // token: {
+        //   type: String,
+        //   default: null,
+        // },
+        // refreshToken: {
+        //   type: String,
+        //   default: null,
+        // },
+        // isVerified: {
+        //   type: Boolean,
+        //   default: false,
+        // },
+         },
   { timestamps: true, versionKey: false },
 );
 
@@ -22,4 +59,3 @@ userSchema.methods.toJSON = function () {
 };
 
 export const User = model('User', userSchema);
-

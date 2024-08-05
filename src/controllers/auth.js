@@ -1,11 +1,10 @@
-import createHttpError from 'http-errors';
-
 import { registerUser } from '../services/auth.js';
 import { loginUser } from '../services/auth.js';
 import { logoutUser } from '../services/auth.js';
 import { refreshUserSession } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
-
+import { requestResetToken } from '../services/auth.js';
+import { resetPassword } from '../services/auth.js';
 
 // register
 export const registerUserController = async (req, res, next) => {
@@ -21,45 +20,54 @@ export const registerUserController = async (req, res, next) => {
   }
 };
 
-
 // login
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+export const loginUserController = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-  if (!session) throw createHttpError(500, 'Failed to create session');
-
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
-  });
-
-  res.json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
+    const { user, session, token } = await loginUser(email, password);
+    res.cookie('refreshToken', session.refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
+    res.cookie('sessionId', session._id.toString(), {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully logged in a user!',
+      data:
+      {email: user.email,
+      name: user.name,
+      gender: user.gender,
+      weight: user.weight,
+      dailyTimeActivity: user.dailyTimeActivity,
+      dailyNorma: user.dailyNorma,
+      avatar: user.avatar,
+      token,
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
 };
-
 
 // logout
-export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
 
-    console.log('User logged out successfully');
+export const logoutUserController = async (req, res, next) => {
+  try {
+    if (req.cookies.sessionId) {
+      await logoutUser(req.cookies.sessionId);
+    }
+    res.clearCookie('sessionId');
+    res.clearCookie('refreshToken');
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
   }
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
 };
-
 
 // session
 const setupSession = (res, session) => {
@@ -73,7 +81,6 @@ const setupSession = (res, session) => {
   });
 };
 
-
 // refresh
 export const refreshUserSessionController = async (req, res) => {
   const session = await refreshUserSession({
@@ -83,7 +90,7 @@ export const refreshUserSessionController = async (req, res) => {
 
   setupSession(res, session);
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully refreshed a session!',
     data: {
@@ -92,3 +99,38 @@ export const refreshUserSessionController = async (req, res) => {
   });
 };
 
+// token reset in email
+export const requestResetEmailController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log('Request received to send reset email for:', email);
+    await requestResetToken(email);
+
+    res.status(200).json({
+      status: 200,
+      message: 'Password reset email sent successfully'
+    });
+  } catch (error) {
+    res.status(error.status || 500).json({
+      status: error.status || 500,
+      message: error.message || 'Something went wrong',
+    });
+  }
+};
+// reset pwd
+export const resetPasswordController = async (req, res) => {
+  try {
+    await resetPassword(req.body);
+    res.status(200).json({
+      status: 200,
+      message: 'Password was successfully reset!',
+      data: {},
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      message: 'Something went wrong',
+      data: error.message,
+    });
+  }
+};

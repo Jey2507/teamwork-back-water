@@ -10,21 +10,27 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = async (to, subject, text) => {
+export const sendEmail = async ({ to, subject, html }) => {
   try {
-    if (!to) throw new Error('No recipient email address specified');
-    const mailOptions = {
+    console.log('Email parameters:', {
       from: process.env.SMTP_FROM,
       to,
       subject,
-      text,
-    };
+      html
+    });
 
-    console.log(`Sending email to: ${to}`);
+    const mailOptions = {
+      from: process.env.SMTP_FROM,
+      to: to,
+      subject: subject,
+      html: html,
+    };
     const info = await transporter.sendMail(mailOptions);
+
     console.log('Email sent:', info.response);
   } catch (error) {
-    console.error('Failed to send email', error);
+
+    console.error('Failed to send email:', error.message);
     throw createHttpError(
       500,
       'Failed to send the email, please try again later.',
@@ -32,3 +38,4 @@ export const sendEmail = async (to, subject, text) => {
     );
   }
 };
+
