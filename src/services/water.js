@@ -26,14 +26,9 @@ export const addWater = async (userId, date, amount) => {
   //  - - - - - - - - -DELETE WATER- - - - - - - - - 
 
   //  - - - - - - - - -UPDATE WATER- - - - - - - - - 
-
   export const updateWater = async (userId, id, amount, date) => {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new Error('Invalid ID format');
-    }
-  
     const mutableElement = await Water.findOne({
-      _id: new mongoose.Types.ObjectId(id),
+      _id: id,
       userId: new mongoose.Types.ObjectId(userId),
     });
   
@@ -43,18 +38,7 @@ export const addWater = async (userId, date, amount) => {
   
     let newDate;
     if (date) {
-      const mutableElementObj = moment(mutableElement.date);
-      const newTime = moment.tz(date, 'HH:mm', 'UTC');
-  
-      mutableElementObj.utc();
-      mutableElementObj.set({
-        hour: newTime.hour(),
-        minute: newTime.minute(),
-        second: 0,
-        millisecond: 0,
-      });
-  
-      newDate = mutableElementObj.toDate();
+      newDate = new Date(date);
     }
   
     const updateFields = {
@@ -68,7 +52,7 @@ export const addWater = async (userId, date, amount) => {
       { new: true }
     );
   };
-
+  
   //  - - - - - - - - -UPDATE WATER- - - - - - - - - 
 
     //  - - - - - - - - -DAILY WATER- - - - - - - - -
