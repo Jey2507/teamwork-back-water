@@ -9,11 +9,21 @@ export const addWaterController = async (req, res) => {
     const userId = req.user.id;
   
     try {
-      if (!date || !amount) {
+      if (!amount) {
         return res.status(400).json({ message: 'Date and amount are required!' });
+      }let currentDate;
+
+      if (!date) {
+        // Якщо дата не вказана, використовуємо поточну дату і час
+        currentDate = new Date();
+      } else {
+        // Якщо дата вказана, встановлюємо відповідний час
+        currentDate = new Date();
+        const [hours, minutes] = date.split(':');
+        currentDate.setUTCHours(parseInt(hours), parseInt(minutes), 0, 0);
       }
   
-      const water = await addWater(userId, new Date(date), amount);
+      const water = await addWater(userId, currentDate, amount);
   
       res.status(201).json({
         status: 201,
@@ -84,7 +94,7 @@ export const addWaterController = async (req, res) => {
 
 export const dailyWaterController = async (req, res) => {
     const userId = req.user.id;
-    const {date } = req.query;
+    const {date } = req.body;
     console.log(req);
   
     try {

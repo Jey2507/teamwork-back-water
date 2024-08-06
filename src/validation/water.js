@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const addWaterSchema = Joi.object({
-    date: Joi.string().required(),
+    date: Joi.string(),
     amount: Joi.number().required(),
   });
 
