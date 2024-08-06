@@ -1,0 +1,52 @@
+tags:
+  - User
+summary: Get User Info
+operationId: getUser
+description: Retrieve the current user's information.
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Successfully retrieved user information.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: User retrieved successfully
+            data:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: alexboo@example.com
+                name:
+                  type: string
+                  example: Alex Boo
+                gender:
+                  type: string
+                  enum: ['male', 'female']
+                  example: male
+                weight:
+                  type: number
+                  example: 75
+                dailyTimeActivity:
+                  type: number
+                  example: 60
+                dailyNorma:
+                  type: number
+                  example: 2.0
+                avatar:
+                  type: string
+                  format: uri
+                  example: 'https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg'
+  '404':
+    description: User not found.
+  '500':
+    description: Internal server error.

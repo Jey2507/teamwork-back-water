@@ -1,0 +1,55 @@
+tags:
+  - Water
+summary: Get Monthly Water Consumption
+operationId: monthlyWater
+description: Retrieve monthly water consumption data for the user.
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - date
+        properties:
+          date:
+            type: string
+            format: date-time
+            example: '2024-08-01T00:00:00Z'
+responses:
+  '200':
+    description: Successfully retrieved monthly water consumption.
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully retrieved monthly water consumption!
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 64e8b1c9e50f3f1234567890
+                  date:
+                    type: string
+                    format: date-time
+                    example: '2024-08-04T10:00:00Z'
+                  amount:
+                    type: number
+                    example: 1500
+                  userId:
+                    type: string
+                    example: 64e8b1c9e50f3f1234567890
+  '400':
+    description: Date is required.
+  '500':
+    description: Internal server error.
