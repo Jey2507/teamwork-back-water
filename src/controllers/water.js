@@ -84,7 +84,8 @@ export const addWaterController = async (req, res) => {
 
 export const dailyWaterController = async (req, res) => {
     const userId = req.user.id;
-    const { date } = req.params;
+    const {date } = req.query;
+    console.log(req);
   
     try {
       if (!date) {
