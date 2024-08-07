@@ -35,34 +35,64 @@ export const updateTokens = async (userId, token, refreshToken) => {
 
 
 // register
+// export const registerUser = async (payload) => {
+//   const isUser = await User.findOne({ email: payload.email });
+//   if (isUser) throw createHttpError(409, 'Email in use');
+
+//   const encryptedPassword = await bcrypt.hash(payload.password, 10);
+//   const user = await User.create({
+//     ...payload,
+//     password: encryptedPassword,
+//     isVerified: true,
+//   });
+
+//   const payloadForTokens = { id: user._id };
+//   const { token, refreshToken } = generateTokens(payloadForTokens);
+
+//   await updateTokens(user._id, token, refreshToken);
+
+//   await sendEmail({
+//     to: user.email,
+//     subject: 'Welcome to AquaTrack!',
+//     html: 'Hello! You registered successfully',
+//   });
+
+//   const userObject = user.toObject();
+//   delete userObject.password;
+//   delete userObject.refreshToken;
+
+//   return { ...userObject, token };
+// };
+
 export const registerUser = async (payload) => {
-  const isUser = await User.findOne({ email: payload.email });
-  if (isUser) throw createHttpError(409, 'Email in use');
+    const isUser = await User.findOne({ email: payload.email });
+    if (isUser) throw createHttpError(409, 'Email in use');
 
-  const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  const user = await User.create({
-    ...payload,
-    password: encryptedPassword,
-    isVerified: true,
-  });
+    const encryptedPassword = await bcrypt.hash(payload.password, 10);
+    const user = await User.create({
+      ...payload,
+      password: encryptedPassword,
+      isVerified: true,
+    });
 
-  const payloadForTokens = { id: user._id };
-  const { token, refreshToken } = generateTokens(payloadForTokens);
+    const payloadForTokens = { id: user._id };
+    const { token, refreshToken } = generateTokens(payloadForTokens);
 
-  await updateTokens(user._id, token, refreshToken);
+    await updateTokens(user._id, token, refreshToken);
 
-  await sendEmail({
-    to: user.email,
-    subject: 'Welcome to AquaTrack!',
-    html: 'Hello! You registered successfully',
-  });
+    await sendEmail({
+      to: user.email,
+      subject: 'Welcome to AquaTrack!',
+      html: 'Hello! You registered successfully',
+    });
 
-  const userObject = user.toObject();
-  delete userObject.password;
-  delete userObject.refreshToken;
+    const userObject = user.toObject();
+    delete userObject.password;
 
-  return { ...userObject, token };
-};
+  //  додала рефреш тут!!!!!!!!
+    return { ...userObject, token, refreshToken };
+  };
+
 
 // login
 export const loginUser = async (email, password) => {

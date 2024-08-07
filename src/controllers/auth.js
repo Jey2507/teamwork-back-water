@@ -10,9 +10,36 @@ import { loginOrSignupWithGoogle } from '../services/auth.js';
 
 
 // register
+// export const registerUserController = async (req, res, next) => {
+//   try {
+//     const user = await registerUser(req.body);
+//     res.status(201).json({
+//       status: 201,
+//       message: 'Successfully registered a user!',
+//       data: user,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const registerUserController = async (req, res, next) => {
   try {
     const user = await registerUser(req.body);
+
+    if (!user.refreshToken) {
+      throw new Error('Refresh token is missing');
+    }
+
+    res.cookie('refreshToken', user.refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
+    res.cookie('sessionId', user._id.toString(), {
+      httpOnly: true,
+      expires: new Date(Date.now() + ONE_DAY),
+    });
+
     res.status(201).json({
       status: 201,
       message: 'Successfully registered a user!',
@@ -22,6 +49,7 @@ export const registerUserController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // login
 export const loginUserController = async (req, res, next) => {
