@@ -34,7 +34,7 @@ const userSchema = new Schema(
         },
         avatar: {
           type: String,
-          default: 'https://console.cloudinary.com/console/c-60c0f1e47a419ccf36eae30da18427/media_library/search?sortDirection=desc&sortField=_score&search_id=my_uploads&view_mode=mosaic&q='
+          default:'https://res.cloudinary.com/dztvd7emk/image/upload/v1722885715/xc2jhivn8gspetouuroy.jpg'
         },
          },
   { timestamps: true, versionKey: false },

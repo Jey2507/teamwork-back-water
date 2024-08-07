@@ -188,14 +188,43 @@ export const resetPassword = async (payload) => {
 };
 
 // google
+// export const loginOrSignupWithGoogle = async (code) => {
+//   const loginTicket = await validateCode(code);
+//   const payload = loginTicket.getPayload();
+//   if (!payload) throw createHttpError(401);
+
+//   let user = await User.findOne({ email: payload.email });
+//   if (!user) {
+//     const password = await bcrypt.hash(randomBytes(10), 10);
+//     user = await User.create({
+//       email: payload.email,
+//       name: getFullNameFromGoogleTokenPayload(payload),
+//       password,
+//       role: 'parent',
+//     });
+//   }
+
+//   const newSession = createSession();
+
+//   return await Session.create({
+//     userId: user._id,
+//     ...newSession,
+//   });
+// };
+
+//  гугл авторизація з  дефолтним паролем
 export const loginOrSignupWithGoogle = async (code) => {
   const loginTicket = await validateCode(code);
   const payload = loginTicket.getPayload();
-  if (!payload) throw createHttpError(401);
+  if (!payload) throw createHttpError(401, 'Unauthorized');
+
 
   let user = await User.findOne({ email: payload.email });
+
   if (!user) {
-    const password = await bcrypt.hash(randomBytes(10), 10);
+
+    //  ТУТ ДЕФОЛТНИЙ ПАРОЛЬ
+    const password = await bcrypt.hash('12345678', 10);
     user = await User.create({
       email: payload.email,
       name: getFullNameFromGoogleTokenPayload(payload),
