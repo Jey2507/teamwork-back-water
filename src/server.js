@@ -14,32 +14,36 @@ import { swaggerDocs } from './middlewares/swaggerDocs.js';
 const PORT = env("PORT", "3003");
 
 export const setupServer = () => {
-    const app = express();
+  const app = express();
 
-    app.use(express.json());
-    app.use(cors());
+  app.use(express.json());
 
-    app.use(
-        pino({
-            transport: {
-              target: 'pino-pretty',
-            },
-          }),
-    );
+  app.use(cors({
+    origin: ['https://aqua-teamwork-app.vercel.app/', 'http://localhost:5173/'],
+    credentials: true,
+  }));
 
-    app.use(cookieParser());
+  app.use(
+    pino({
+      transport: {
+        target: 'pino-pretty',
+      },
+    }),
+  );
 
-    app.use('/', router);
+  app.use(cookieParser());
 
-    app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/', router);
 
-    app.use('/api-docs', swaggerDocs());
+  app.use('/uploads', express.static(UPLOAD_DIR));
 
-    app.use(errorHandler);
-    app.use(notFoundHanler);
+  app.use('/api-docs', swaggerDocs());
+
+  app.use(errorHandler);
+  app.use(notFoundHanler);
 
 
-    app.listen(PORT,() => {
-        console.log(`Server is running on port ${PORT}`);
-    });
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 };
