@@ -18,11 +18,12 @@ export const setupServer = () => {
 
   app.use(express.json());
 
-  // app.use(cors({
-  //   origin: ['https://aqua-teamwork-app.vercel.app/', 'http://localhost:5173/'],
-  //   credentials: true,
-  // }));
-  app.use(cors());
+  const corsOptions = {
+    origin: ['https://aqua-teamwork-app.vercel.app', 'http://localhost:5173'], // URL of websites
+    credentials: true, // turns on credentials
+  };
+
+  app.use(cors(corsOptions));
 
   app.use(
     pino({
