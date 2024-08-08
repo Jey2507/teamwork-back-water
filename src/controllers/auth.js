@@ -32,23 +32,26 @@ export const loginUserController = async (req, res, next) => {
     res.cookie('refreshToken', session.refreshToken, {
       httpOnly: true,
       expires: new Date(Date.now() + ONE_DAY),
+      sameSite: 'None'
     });
     res.cookie('sessionId', session._id.toString(), {
       httpOnly: true,
       expires: new Date(Date.now() + ONE_DAY),
+      sameSite: 'None'
     });
     res.status(200).json({
       status: 200,
       message: 'Successfully logged in a user!',
       data:
-      {email: user.email,
-      name: user.name,
-      gender: user.gender,
-      weight: user.weight,
-      dailyTimeActivity: user.dailyTimeActivity,
-      dailyNorma: user.dailyNorma,
-      avatar: user.avatar,
-      token,
+      {
+        email: user.email,
+        name: user.name,
+        gender: user.gender,
+        weight: user.weight,
+        dailyTimeActivity: user.dailyTimeActivity,
+        dailyNorma: user.dailyNorma,
+        avatar: user.avatar,
+        token,
       }
     });
   } catch (error) {
@@ -77,10 +80,12 @@ const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
+    sameSite: 'None'
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
+    sameSite: 'None'
   });
 };
 
