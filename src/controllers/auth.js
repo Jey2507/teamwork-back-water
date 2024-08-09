@@ -8,18 +8,21 @@ import { resetPassword } from '../services/auth.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
 import { loginOrSignupWithGoogle } from '../services/auth.js';
 
-const setupResponseSession = (res, {refreshToken, _id})=> {
+const setupResponseSession = (res, { refreshToken, _id }) => {
   res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      expires: new Date(Date.now() + ONE_DAY),
-      sameSite: 'None'
-    });
-    res.cookie('sessionId', _id, {
-      httpOnly: true,
-      expires: new Date(Date.now() + ONE_DAY),
-      sameSite: 'None'
-    });
-}
+    httpOnly: true,
+    expires: new Date(Date.now() + ONE_DAY),
+    sameSite: 'None', // або 'Strict', залежно від ваших потреб
+    secure: true, // це важливо для production середовища з HTTPS
+  });
+  res.cookie('sessionId', _id, {
+    httpOnly: true,
+    expires: new Date(Date.now() + ONE_DAY),
+    sameSite: 'None',
+    secure: true,
+  });
+};
+
 
 // register
 export const registerUserController = async (req, res, next) => {
@@ -83,22 +86,28 @@ export const logoutUserController = async (req, res, next) => {
 
 
 // refresh
-export const refreshUserSessionController = async (req, res) => {
-  const session = await refreshUserSession({
-    sessionId: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
+export const refreshUserSessionController = async (req, res, next) => {
+  try {
+    const session = await refreshUserSession({
+      sessionId: req.cookies.sessionId,
+      refreshToken: req.cookies.refreshToken,
+    });
 
-  setupResponseSession(res, session);
+    // Оновлення куків після того, як сесія була оновлена
+    setupResponseSession(res, session);
 
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
-  });
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully refreshed a session!',
+      data: {
+        accessToken: session.accessToken, // передаємо новий accessToken
+      },
+    });
+  } catch (error) {
+    next(error); // обробка помилки
+  }
 };
+
 
 // token reset in email
 export const requestResetEmailController = async (req, res) => {
@@ -151,7 +160,7 @@ export const getGoogleOAuthUrlController = async (req, res) => {
 // google login
 export const loginWithGoogleController = async (req, res) => {
   const session = await loginOrSignupWithGoogle(req.body.code);
-  setupSession(res, session);
+  setupResponseSession(res, session);
 
   res.json({
     status: 200,

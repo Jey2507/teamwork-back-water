@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { THIRTY_MINUTES, THIRTY_DAYS } from '../constants/index.js';
+import { THIRTY_MINUTES, THIRTY_DAYS, ONE_DAY } from '../constants/index.js';
 import { Session } from '../db/models/Session.js';
 import { randomBytes } from 'crypto';
 import { User } from '../db/models/User.js';
@@ -112,17 +112,22 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
+
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
   if (isSessionTokenExpired) {
     throw createHttpError(401, 'Session token expired');
   }
 
-  const newSession = createSession();
-  await Session.deleteOne({ _id: sessionId, refreshToken });
+  // Оновлення сесії замість видалення
+  const newRefreshToken = generateTokens(); // Ваш метод генерації токену
+  session.refreshToken = newRefreshToken;
+  session.refreshTokenValidUntil = new Date(Date.now() + ONE_DAY);
+  await session.save();
 
-  return await Session.create({ userId: session.userId, ...newSession });
+  return session; // Повертаємо оновлену сесію
 };
+
 
 
 //  token reset in email
