@@ -60,6 +60,7 @@ export const loginUserController = async (req, res, next) => {
         dailyNorma: user.dailyNorma,
         avatar: user.avatar,
         token,
+        refreshToken: session.refreshToken
       }
     });
   } catch (error) {
