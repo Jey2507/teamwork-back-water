@@ -11,8 +11,8 @@ import { loginOrSignupWithGoogle } from '../services/auth.js';
 const setupResponseSession = (res, { refreshToken, _id }) => {
   res.cookie('refreshToken', refreshToken, {
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'None', 
-    secure: true, 
+    sameSite: 'None',
+    secure: true,
   });
   res.cookie('sessionId', _id, {
     expires: new Date(Date.now() + ONE_DAY),
@@ -44,7 +44,7 @@ export const loginUserController = async (req, res, next) => {
     const { user, session, token } = await loginUser(email, password);
 
     setupResponseSession(res, session);
-    
+
     res.status(200).json({
       status: 200,
       message: 'Successfully logged in a user!',
@@ -86,14 +86,15 @@ export const logoutUserController = async (req, res, next) => {
 // refresh
 export const refreshUserSessionController = async (req, res, next) => {
   try {
+    console.log('1');
     const session = await refreshUserSession({
       sessionId: req.cookies.sessionId,
       refreshToken: req.cookies.refreshToken,
     });
-
+    console.log('2');
     // Оновлення куків після того, як сесія була оновлена
     setupResponseSession(res, session);
-
+    console.log('3');
     res.status(200).json({
       status: 200,
       message: 'Successfully refreshed a session!',
@@ -102,6 +103,8 @@ export const refreshUserSessionController = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.log('4');
+
     next(error); // обробка помилки
   }
 };
