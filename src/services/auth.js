@@ -23,6 +23,7 @@ export const comparePasswords = async (password, hashedPassword) => {
 };
 
 export const generateTokens = (payload) => {
+
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
   const refreshToken = jwt.sign(payload, process.env.REFRESH_JWT_SECRET, { expiresIn: "30d" });
   return { token, refreshToken };
@@ -108,7 +109,6 @@ const createSession = () => {
 // refresh session
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   const session = await Session.findOne({ _id: sessionId, refreshToken });
-
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
@@ -120,7 +120,8 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
   }
 
   // Оновлення сесії замість видалення
-  const newRefreshToken = generateTokens(); // Ваш метод генерації токену
+  const payload = { id: session.userId };
+  const newRefreshToken = generateTokens(payload); // Ваш метод генерації токену
   session.refreshToken = newRefreshToken;
   session.refreshTokenValidUntil = new Date(Date.now() + ONE_DAY);
   await session.save();
@@ -169,7 +170,7 @@ export const resetPassword = async (payload) => {
 
   try {
     entries = jwt.verify(payload.token, process.env.JWT_SECRET);
-      } catch (err) {
+  } catch (err) {
 
     if (err instanceof Error) throw createHttpError(401, 'Token is expired or invalid.');
     throw err;
