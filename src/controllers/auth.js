@@ -57,8 +57,7 @@ export const loginUserController = async (req, res, next) => {
         dailyTimeActivity: user.dailyTimeActivity,
         dailyNorma: user.dailyNorma,
         avatar: user.avatar,
-        token: token,
-        refreshToken: session.refreshToken
+        token
       }
     });
   } catch (error) {
