@@ -10,13 +10,11 @@ import { loginOrSignupWithGoogle } from '../services/auth.js';
 
 const setupResponseSession = (res, { refreshToken, _id }) => {
   res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'None', // або 'Strict', залежно від ваших потреб
-    secure: true, // це важливо для production середовища з HTTPS
+    sameSite: 'None', 
+    secure: true, 
   });
   res.cookie('sessionId', _id, {
-    httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
     sameSite: 'None',
     secure: true,
