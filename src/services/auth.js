@@ -12,7 +12,6 @@ import { getFullNameFromGoogleTokenPayload, validateCode } from '../utils/google
 
 dotenv.config();
 
-
 // authorization
 export const findUserByEmail = async (email) => {
   return await User.findOne({ email });
@@ -23,17 +22,14 @@ export const comparePasswords = async (password, hashedPassword) => {
 };
 
 export const generateTokens = (payload) => {
-
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1d" });
   const refreshToken = jwt.sign(payload, process.env.REFRESH_JWT_SECRET, { expiresIn: "30d" });
   return { token, refreshToken };
 };
 
-
 export const updateTokens = async (userId, token, refreshToken) => {
   return await User.findByIdAndUpdate(userId, { token, refreshToken });
 };
-
 
 // register
 export const registerUser = async (payload) => {
@@ -108,23 +104,32 @@ const createSession = () => {
 
 // refresh session
 export const refreshUserSession = async ({ sessionId, refreshToken }) => {
+
+  console.log('10');
   const session = await Session.findOne({ _id: sessionId, refreshToken });
   if (!session) {
     throw createHttpError(401, 'Session not found');
   }
-
+  console.log('11');
   const isSessionTokenExpired =
     new Date() > new Date(session.refreshTokenValidUntil);
   if (isSessionTokenExpired) {
     throw createHttpError(401, 'Session token expired');
   }
-
+  console.log('12');
   // Оновлення сесії замість видалення
   const payload = { id: session.userId };
-  const newRefreshToken = generateTokens(payload); // Ваш метод генерації токену
+  console.log('13');
+  const { token, refreshToken: newRefreshToken } = generateTokens(payload); // Ваш метод генерації токену
+  console.log('14');
   session.refreshToken = newRefreshToken;
-  session.refreshTokenValidUntil = new Date(Date.now() + ONE_DAY);
+  session.accessToken = token;
+  console.log('15');
+  session.accessTokenValidUntil = new Date(Date.now() + THIRTY_MINUTES),
+    session.refreshTokenValidUntil = new Date(Date.now() + ONE_DAY);
+  console.log('16');
   await session.save();
+  console.log('17');
 
   return session; // Повертаємо оновлену сесію
 };
