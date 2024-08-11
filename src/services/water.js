@@ -76,19 +76,46 @@ export const addWater = async (userId, date, amount) => {
 
     //  - - - - - - - - -MONTHLY WATER- - - - - - - - -
 
-  export const monthlyWater = async (userId, date) => {
-    const startOfMonth = moment(date).startOf('month').toDate();
-    const endOfMonth = moment(date).endOf('month').toDate();
-  
-    const waterData = await Water.find({
-      userId: userId,
-      date: {
-        $gte: startOfMonth,
-        $lte: endOfMonth,
-      },
-    });
-  
-    return waterData;
-  };
+    export const monthlyWater = async (userId, date) => {
+        const startOfMonth = moment(date).startOf('month').toDate();
+        const endOfMonth = moment(date).endOf('month').toDate();
+
+        const dailyTotals = {};
+    
+        for (let day = moment(startOfMonth); day.isSameOrBefore(endOfMonth); day.add(1, 'day')) {
+            dailyTotals[day.format('YYYY-MM-DD')] = 0;
+        }
+    
+        const waterData = await Water.aggregate([
+            {
+                $match: {
+                    userId: new mongoose.Types.ObjectId(userId), 
+                    date: {
+                        $gte: startOfMonth,
+                        $lte: endOfMonth,
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$date" },
+                    },
+                    totalAmount: { $sum: "$amount" },
+                },
+            },
+        ]);
+    
+        console.log('Aggregated Water Data:', waterData);
+    
+        waterData.forEach(entry => {
+            dailyTotals[entry._id] = entry.totalAmount;
+        });
+    
+        return Object.keys(dailyTotals).map(date => ({
+            date,
+            amount: dailyTotals[date],
+        }));
+    };
   
     //  - - - - - - - - -MONTHLY WATER- - - - - - - - -
