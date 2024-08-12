@@ -1,0 +1,23 @@
+tags:
+  - Auth
+summary: Get Google OAuth URL
+operationId: getGoogleOAuthUrl
+description: Generates the URL to initiate Google OAuth login.
+responses:
+  '200':
+    description: Successfully generated Google OAuth URL
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              example: "https://accounts.google.com/o/oauth2/v2/auth?...&redirect_uri=https%3A%2F%2Faqua-teamwork-app.vercel.app%2Fauth%2Fconfirm-oauth"
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/error.yaml'

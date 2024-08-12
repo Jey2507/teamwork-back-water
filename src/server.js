@@ -19,7 +19,7 @@ export const setupServer = () => {
   app.use(express.json());
 
   const corsOptions = {
-    origin: ['https://aqua-teamwork-app.vercel.app', 'http://localhost:5173'], // URL of websites
+    origin: ['https://aqua-teamwork-app.vercel.app', 'http://localhost:5173', 'https://aqua-app-teamwork.onrender.com'], // URL of websites
     credentials: true, // turns on credentials
   };
 

@@ -1,0 +1,31 @@
+tags:
+  - Auth
+summary: Refresh user session
+operationId: refreshUserSession
+description: Refreshes the user's access token using a refresh token.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          refreshToken:
+            type: string
+responses:
+  '200':
+    description: Successfully refreshed
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: New JWT access token
+  '401':
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/error.yaml'

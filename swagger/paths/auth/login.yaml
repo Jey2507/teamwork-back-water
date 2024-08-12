@@ -1,0 +1,37 @@
+tags:
+  - Auth
+summary: Login a user
+operationId: loginUser
+description: Authenticates a user and returns a JWT token.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          email:
+            type: string
+            format: email
+          password:
+            type: string
+responses:
+  '200':
+    description: Successfully logged in
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: JWT access token
+            refreshToken:
+              type: string
+              description: JWT refresh token
+  '401':
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/error.yaml'

@@ -19,20 +19,152 @@
   ],
   "tags": [
     {
-      "name": "AquaTrack",
+      "name": "Auth",
+      "description": "Auth operations."
+    },
+    {
+      "name": "User",
       "description": "Operations about users."
     },
     {
-      "name": "Auth",
-      "description": "Auth operations."
+      "name": "Water",
+      "description": "Operations about water consumption."
     }
   ],
   "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User Login",
+        "operationId": "userLogin",
+        "description": "Authenticate user and return JWT token.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "alexboo@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User successfully logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "your-jwt-token"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User Registration",
+        "operationId": "userRegister",
+        "description": "Register a new user and return JWT token.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password", "name"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "alexboo@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Alex Boo"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Registration successful."
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "your-jwt-token"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          }
+        }
+      }
+    },
     "/user": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Get User Info",
         "operationId": "getUser",
         "description": "Retrieve the current user's information.",
@@ -71,10 +203,7 @@
                         },
                         "gender": {
                           "type": "string",
-                          "enum": [
-                            "male",
-                            "female"
-                          ],
+                          "enum": ["male", "female"],
                           "example": "male"
                         },
                         "weight": {
@@ -108,13 +237,9 @@
             "description": "Internal server error."
           }
         }
-      }
-    },
-    "/user/update": {
+      },
       "patch": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Update User Info",
         "operationId": "patchUser",
         "description": "Update the current user's information.",
@@ -140,10 +265,7 @@
                   },
                   "gender": {
                     "type": "string",
-                    "enum": [
-                      "male",
-                      "female"
-                    ],
+                    "enum": ["male", "female"],
                     "example": "male"
                   },
                   "weight": {
@@ -170,59 +292,114 @@
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated user information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully updated user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "example": "user@example.com"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
+                        "gender": {
+                          "type": "string",
+                          "enum": ["male", "female"],
+                          "example": "male"
+                        },
+                        "weight": {
+                          "type": "number",
+                          "example": 75
+                        },
+                        "dailyTimeActivity": {
+                          "type": "number",
+                          "example": 60
+                        },
+                        "dailyNorma": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "avatar": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
-          "responses": {
-            "200": {
-              "description": "Successfully updated user information.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "status": {
-                        "type": "integer",
-                        "example": 200
-                      },
-                      "message": {
-                        "type": "string",
-                        "example": "Successfully updated user!"
-                      },
-                      "data": {
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "Unauthorized."
+          }
+        }
+      }
+    },
+    "/water": {
+      "get": {
+        "tags": ["Water"],
+        "summary": "Get Water Records",
+        "operationId": "getWaterRecords",
+        "description": "Retrieve all water consumption records for the user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved water records.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Water records retrieved successfully."
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "email": {
-                            "type": "string",
-                            "format": "email",
-                            "example": "user@example.com"
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "John Doe"
-                          },
-                          "gender": {
-                            "type": "string",
-                            "enum": [
-                              "male",
-                              "female"
-                            ],
-                            "example": "male"
-                          },
-                          "weight": {
+                          "amount": {
                             "type": "number",
-                            "example": 75
+                            "example": 250
                           },
-                          "dailyTimeActivity": {
-                            "type": "number",
-                            "example": 60
-                          },
-                          "dailyNorma": {
-                            "type": "number",
-                            "example": 2
-                          },
-                          "avatar": {
+                          "timestamp": {
                             "type": "string",
-                            "format": "uri",
-                            "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                            "format": "date-time",
+                            "example": "2024-08-12T10:00:00Z"
                           }
                         }
                       }
@@ -230,25 +407,18 @@
                   }
                 }
               }
-            },
-            "404": {
-              "description": "User not found."
-            },
-            "500": {
-              "description": "Internal server error."
             }
+          },
+          "401": {
+            "description": "Unauthorized."
           }
         }
-      }
-    },
-    "/water/add-water": {
+      },
       "post": {
-        "tags": [
-          "Water"
-        ],
-        "summary": "Add Water Consumption",
-        "operationId": "addWater",
-        "description": "Add a new entry for water consumption.",
+        "tags": ["Water"],
+        "summary": "Add Water Record",
+        "operationId": "addWaterRecord",
+        "description": "Add a new water consumption record.",
         "security": [
           {
             "bearerAuth": []
@@ -259,19 +429,16 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "date",
-                  "amount"
-                ],
+                "required": ["amount"],
                 "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2024-08-04T10:00:00Z"
-                  },
                   "amount": {
                     "type": "number",
-                    "example": 500
+                    "example": 250
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2024-08-12T10:00:00Z"
                   }
                 }
               }
@@ -280,7 +447,7 @@
         },
         "responses": {
           "201": {
-            "description": "Water consumption added successfully.",
+            "description": "Successfully added water record.",
             "content": {
               "application/json": {
                 "schema": {
@@ -292,273 +459,19 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully added water consumption!"
+                      "example": "Water record added successfully."
                     },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "id": {
-                          "type": "string",
-                          "example": "64e8b1c9e50f3f1234567890"
-                        },
-                        "date": {
-                          "type": "string",
-                          "format": "date-time",
-                          "example": "2024-08-04T10:00:00Z"
-                        },
                         "amount": {
                           "type": "number",
-                          "example": 500
+                          "example": 250
                         },
-                        "userId": {
-                          "type": "string",
-                          "example": "64e8b1c9e50f3f1234567890"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid input."
-          },
-          "500": {
-            "description": "Internal server error."
-          }
-        }
-      }
-    },
-    "/water/delete-water/{id}": {
-      "delete": {
-        "tags": [
-          "Water"
-        ],
-        "summary": "Delete Water Consumption",
-        "operationId": "deleteWater",
-        "description": "Delete an existing entry for water consumption.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64e8b1c9e50f3f1234567890"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Water consumption deleted successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully deleted water consumption!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "example": "64e8b1c9e50f3f1234567890"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Entry not found."
-          },
-          "500": {
-            "description": "Internal server error."
-          }
-        }
-      }
-    },
-    "/water/update-water/{id}": {
-      "patch": {
-        "tags": [
-          "Water"
-        ],
-        "summary": "Update Water Consumption",
-        "operationId": "updateWater",
-        "description": "Update an existing entry for water consumption.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "64e8b1c9e50f3f1234567890"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2024-08-04T10:00:00Z"
-                  },
-                  "amount": {
-                    "type": "number",
-                    "example": 600
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Water consumption updated successfully.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully updated amount of water!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "example": "64e8b1c9e50f3f1234567890"
-                        },
-                        "date": {
+                        "timestamp": {
                           "type": "string",
                           "format": "date-time",
-                          "example": "2024-08-04T10:00:00Z"
-                        },
-                        "amount": {
-                          "type": "number",
-                          "example": 600
-                        },
-                        "userId": {
-                          "type": "string",
-                          "example": "64e8b1c9e50f3f1234567890"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Entry not found."
-          },
-          "500": {
-            "description": "Internal server error."
-          }
-        }
-      }
-    },
-    "/water/daily-water": {
-      "get": {
-        "tags": [
-          "Water"
-        ],
-        "summary": "Get Daily Water Consumption",
-        "operationId": "dailyWater",
-        "description": "Retrieve daily water consumption data for the user.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "date"
-                ],
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2024-08-04T00:00:00Z"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved daily water consumption.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully retrieved daily water consumption!"
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "example": "64e8b1c9e50f3f1234567890"
-                          },
-                          "date": {
-                            "type": "string",
-                            "format": "date-time",
-                            "example": "2024-08-04T10:00:00Z"
-                          },
-                          "amount": {
-                            "type": "number",
-                            "example": 500
-                          },
-                          "userId": {
-                            "type": "string",
-                            "example": "64e8b1c9e50f3f1234567890"
-                          }
+                          "example": "2024-08-12T10:00:00Z"
                         }
                       }
                     }
@@ -568,97 +481,10 @@
             }
           },
           "400": {
-            "description": "Date is required."
+            "description": "Bad request."
           },
-          "500": {
-            "description": "Internal server error."
-          }
-        }
-      }
-    },
-    "/water/monthly-water": {
-      "get": {
-        "tags": [
-          "Water"
-        ],
-        "summary": "Get Monthly Water Consumption",
-        "operationId": "monthlyWater",
-        "description": "Retrieve monthly water consumption data for the user.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "date"
-                ],
-                "properties": {
-                  "date": {
-                    "type": "string",
-                    "format": "date-time",
-                    "example": "2024-08-01T00:00:00Z"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved monthly water consumption.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully retrieved monthly water consumption!"
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "example": "64e8b1c9e50f3f1234567890"
-                          },
-                          "date": {
-                            "type": "string",
-                            "format": "date-time",
-                            "example": "2024-08-04T10:00:00Z"
-                          },
-                          "amount": {
-                            "type": "number",
-                            "example": 1500
-                          },
-                          "userId": {
-                            "type": "string",
-                            "example": "64e8b1c9e50f3f1234567890"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Date is required."
-          },
-          "500": {
-            "description": "Internal server error."
+          "401": {
+            "description": "Unauthorized."
           }
         }
       }
@@ -668,106 +494,49 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     },
     "schemas": {
-      "user": {
+      "User": {
         "type": "object",
-        "required": [
-          "email",
-          "password"
-        ],
         "properties": {
           "email": {
-            "description": "User's email address",
             "type": "string",
-            "format": "email",
-            "example": "alexboo@ukr.net"
+            "format": "email"
           },
           "name": {
-            "description": "User's name",
-            "type": "string",
-            "example": "Alex Boo"
+            "type": "string"
           },
           "gender": {
-            "description": "User's gender",
             "type": "string",
-            "enum": [
-              "male",
-              "female"
-            ],
-            "example": "female"
+            "enum": ["male", "female"]
           },
           "weight": {
-            "description": "User's weight in kilograms",
-            "type": "number",
-            "example": 75
+            "type": "number"
           },
           "dailyTimeActivity": {
-            "description": "User's daily time activity in minutes",
-            "type": "number",
-            "example": 45
+            "type": "number"
           },
           "dailyNorma": {
-            "description": "User's daily water intake norm in liters",
-            "type": "number",
-            "example": 1.8
+            "type": "number"
           },
           "avatar": {
-            "description": "URL to the user's avatar image",
             "type": "string",
-            "format": "uri",
-            "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
+            "format": "uri"
           }
         }
       },
-      "water": {
+      "Water": {
         "type": "object",
-        "required": [
-          "date",
-          "amount",
-          "userId"
-        ],
         "properties": {
-          "date": {
-            "description": "Date when the water entry was created",
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-08-05T12:00:00Z"
-          },
           "amount": {
-            "description": "Amount of water consumed",
-            "type": "number",
-            "example": 500
+            "type": "number"
           },
-          "userId": {
-            "description": "ID of the user associated with this water entry",
+          "timestamp": {
             "type": "string",
-            "format": "uuid",
-            "example": "60d0fe4f5311236168a109ca"
-          }
-        }
-      }
-    },
-    "responses": {
-      "401": {
-        "description": "Unauthorized",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 401
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Unauthorized"
-                }
-              }
-            }
+            "format": "date-time"
           }
         }
       }

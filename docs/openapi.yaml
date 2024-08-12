@@ -5,38 +5,78 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description:
-    This is a documentation of AquaTrack app
+  description: This is a documentation of AquaTrack app
 tags:
   - name: AquaTrack
     description: Operations about users.
   - name: Auth
     description: Auth operations.
+  - name: User
+    description: Operations about users.
+  - name: Water
+    description: Operations about water consumption.
 servers:
   - url: http://localhost:3003
   - url: https://aqua-app-teamwork.onrender.com
 paths:
+  /auth/register:
+    post:
+      $ref: '../swagger/paths/auth/register.yaml'
+  /auth/login:
+    post:
+      $ref: '../swagger/paths/auth/login.yaml'
+  /auth/logout:
+    post:
+      $ref: '../swagger/paths/auth/logout.yaml'
+  /auth/refresh:
+    post:
+      $ref: '../swagger/paths/auth/refresh.yaml'
+  /auth/send-reset-email:
+    post:
+      $ref: '../swagger/paths/auth/send-reset-email.yaml'
+  /auth/reset-password:
+    post:
+      $ref: '../swagger/paths/auth/reset-password.yaml'
+  /auth/get-oauth-url:
+    get:
+      $ref: '../swagger/paths/auth/get-oauth-url.yaml'
+  /auth/confirm-oauth:
+    post:
+      $ref: '../swagger/paths/auth/confirm-oauth.yaml'
   /user:
     get:
       $ref: '../swagger/paths/user/get.yaml'
-  /user/update:
+      security:
+        - bearerAuth: []
     patch:
       $ref: '../swagger/paths/user/update.yaml'
+      security:
+        - bearerAuth: []
   /water/add-water:
     post:
       $ref: '../swagger/paths/water/add-water.yaml'
+      security:
+        - bearerAuth: []
   /water/delete-water/{id}:
     delete:
       $ref: '../swagger/paths/water/{waterId}/delete-water.yaml'
+      security:
+        - bearerAuth: []
   /water/update-water/{id}:
     patch:
       $ref: '../swagger/paths/water/{waterId}/update-water.yaml'
+      security:
+        - bearerAuth: []
   /water/daily-water:
     get:
       $ref: '../swagger/paths/water/daily-water.yaml'
+      security:
+        - bearerAuth: []
   /water/monthly-water:
     get:
       $ref: '../swagger/paths/water/monthly-water.yaml'
+      security:
+        - bearerAuth: []
 components:
   securitySchemes:
     bearerAuth:
@@ -82,7 +122,6 @@ components:
           type: string
           format: uri
           example: "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
-
     water:
       type: object
       required:
@@ -118,4 +157,3 @@ components:
               message:
                 type: string
                 example: Unauthorized
-
