@@ -8,10 +8,6 @@ properties:
     type: string
     format: email
     example: "alexboo@ukr.net"
-  password:
-    description: "User's password"
-    type: string
-    example: "password123"
   name:
     description: "User's name"
     type: string
