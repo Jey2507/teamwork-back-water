@@ -1,39 +1,38 @@
 type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          description: "User's email address"
-          type: string
-          format: email
-          example: "alexboo@ukr.net"
-        name:
-          description: "User's name"
-          type: string
-          example: "Alex Boo"
-        gender:
-          description: "User's gender"
-          type: string
-          enum:
-            - male
-            - female
-          example: "male"
-        weight:
-          description: "User's weight in kilograms"
-          type: number
-          example: 75
-        dailyTimeActivity:
-          description: "User's daily time activity in minutes"
-          type: number
-          example: 45
-        dailyNorma:
-          description: "User's daily water intake norm in liters"
-          type: number
-          example: 1.8
-        avatar:
-          description: "URL to the user's avatar image"
-          type: string
-          format: uri
-          example: "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
-
+required:
+  - email
+  - password
+properties:
+  email:
+    description: "User's email address"
+    type: string
+    format: email
+    example: "alexboo@ukr.net"
+  name:
+    description: "User's name"
+    type: string
+    example: "Alex Boo"
+  gender:
+    description: "User's gender"
+    type: string
+    enum:
+      - male
+      - female
+    example: "female"
+  weight:
+    description: "User's weight in kilograms"
+    type: number
+    example: 75
+  dailyTimeActivity:
+    description: "User's daily time activity in minutes"
+    type: number
+    example: 45
+  dailyNorma:
+    description: "User's daily water intake norm in liters"
+    type: number
+    example: 1.8
+  avatar:
+    description: "URL to the user's avatar image"
+    type: string
+    format: uri
+    example: "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
