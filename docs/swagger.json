@@ -54,7 +54,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user"
+                "$ref": "#/components/schemas/registerUser"
               }
             }
           }
@@ -315,7 +315,7 @@
                         "avatar": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                          "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
                         }
                       }
                     }
@@ -384,7 +384,7 @@
                   "avatar": {
                     "type": "string",
                     "format": "uri",
-                    "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                    "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
                   },
                   "file": {
                     "type": "string",
@@ -446,7 +446,8 @@
                         "avatar": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                          "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpgnpm run dev
+                          "
                         }
                       }
                     }
@@ -894,6 +895,26 @@
           }
         }
       },
+      "registerUser": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "description": "User's email address",
+            "type": "string",
+            "format": "email",
+            "example": "alexboo@ukr.net"
+          },
+          "password": {
+            "description": "User's password",
+            "type": "string",
+            "example": "password123"
+          }
+        }
+      },
       "user": {
         "type": "object",
         "required": [
@@ -906,6 +927,11 @@
             "type": "string",
             "format": "email",
             "example": "alexboo@ukr.net"
+          },
+          "password": {
+            "description": "User's password",
+            "type": "string",
+            "example": "password123"
           },
           "name": {
             "description": "User's name",
