@@ -72,21 +72,6 @@ components:
       type: http
       scheme: bearer
   schemas:
-    registerUser:
-      type: object
-      required:
-        - email
-        - password
-      properties:
-        email:
-          description: "User's email address"
-          type: string
-          format: email
-          example: "alexboo@ukr.net"
-        password:
-          description: "User's password"
-          type: string
-          example: "password123"
     user:
       type: object
       required:
@@ -98,10 +83,6 @@ components:
           type: string
           format: email
           example: "alexboo@ukr.net"
-        password:
-          description: "User's password"
-          type: string
-          example: "password123"
         name:
           description: "User's name"
           type: string
