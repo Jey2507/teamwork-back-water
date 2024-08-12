@@ -54,7 +54,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user"
+                "$ref": "#/components/schemas/registerUser"
               }
             }
           }
@@ -81,17 +81,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/401"
+                  "$ref": "#/components/responses/401"
                 }
               }
             }
           },
           "409": {
-            "description": "Conflict (e.g., user already exists)",
+            "description": "User already exists",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/401"
+                  "$ref": "#/components/responses/401"
                 }
               }
             }
@@ -152,7 +152,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/401"
+                  "$ref": "#/components/responses/401"
                 }
               }
             }
@@ -190,7 +190,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/401"
+                  "$ref": "#/components/responses/401"
                 }
               }
             }
@@ -243,7 +243,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/401"
+                  "$ref": "#/components/responses/401"
                 }
               }
             }
@@ -315,7 +315,7 @@
                         "avatar": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                          "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
                         }
                       }
                     }
@@ -384,7 +384,7 @@
                   "avatar": {
                     "type": "string",
                     "format": "uri",
-                    "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                    "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
                   },
                   "file": {
                     "type": "string",
@@ -446,7 +446,7 @@
                         "avatar": {
                           "type": "string",
                           "format": "uri",
-                          "example": "https://res.cloudinary.com/yourcloud/image/upload/v1234567890/avatar.jpg"
+                          "example": "https://res.cloudinary.com/dztvd7emk/image/upload/v1722795504/xxkv5fjuoqma9hsn7qbc.jpg"
                         }
                       }
                     }

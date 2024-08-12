@@ -10,7 +10,7 @@ requestBody:
   content:
     application/json:
       schema:
-        $ref: '../../components/schemas/user.yaml'
+        $ref: ..\..\components\schemas\registerUser.yaml
 responses:
   '201':
     description: Successfully registered
