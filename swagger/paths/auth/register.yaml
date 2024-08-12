@@ -2,13 +2,15 @@ tags:
   - Auth
 summary: Register a new user
 operationId: registerUser
-description: Creates a new user in the system.
+description: Registers a new user with the provided details.
+security:
+  - bearerAuth: []
 requestBody:
   required: true
   content:
     application/json:
       schema:
-        $ref: '../schemas/user.yaml'  
+        $ref: '../../components/schemas/user.yaml'
 responses:
   '201':
     description: Successfully registered
@@ -25,10 +27,10 @@ responses:
     content:
       application/json:
         schema:
-          $ref: '../schemas/error.yaml'
+          $ref: ..\..\components\responses\401.yaml
   '409':
     description: Conflict (e.g., user already exists)
     content:
       application/json:
         schema:
-          $ref: '../schemas/error.yaml'
+          $ref: ..\..\components\responses\401.yaml

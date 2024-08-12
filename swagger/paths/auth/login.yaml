@@ -34,4 +34,4 @@ responses:
     content:
       application/json:
         schema:
-          $ref: '../schemas/error.yaml'
+          $ref: '../../components/responses/401.yaml'

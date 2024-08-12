@@ -15,23 +15,6 @@ parameters:
 responses:
   '204':
     description: Water consumption deleted successfully.
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 204
-            message:
-              type: string
-              example: Successfully deleted water consumption!
-            data:
-              type: object
-              properties:
-                id:
-                  type: string
-                  example: 64e8b1c9e50f3f1234567890
   '404':
     description: Entry not found.
   '500':
