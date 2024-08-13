@@ -10,18 +10,12 @@
     "description": "This is a documentation of AquaTrack app"
   },
   "servers": [
-    {
-      "url": "http://localhost:3003"
-    },
+    
     {
       "url": "https://aqua-app-teamwork.onrender.com"
     }
   ],
   "tags": [
-    {
-      "name": "AquaTrack",
-      "description": "App helps users receive an adequate amount of water every day."
-    },
     {
       "name": "Auth",
       "description": "Auth operations."
@@ -876,43 +870,7 @@
       }
     },
     "schemas": {
-      "401": {
-        "description": "Unauthorized error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": [
-                "status",
-                "message",
-                "data"
-              ],
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 401
-                },
-                "message": {
-                  "type": "string",
-                  "example": "UnauthorizedError"
-                },
-                "data": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Access token expired"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
+
       "user": {
         "type": "object",
         "required": [
