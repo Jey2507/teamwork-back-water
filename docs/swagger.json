@@ -20,7 +20,7 @@
   "tags": [
     {
       "name": "AquaTrack",
-      "description": "Operations about users."
+      "description": "App helps users receive an adequate amount of water every day."
     },
     {
       "name": "Auth",
@@ -35,7 +35,8 @@
       "description": "Operations about water consumption."
     }
   ],
-  "paths": {
+  "paths": 
+     {
     "/auth/register": {
       "post": {
         "tags": [
@@ -54,7 +55,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/user"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "alexboo@ukr.net"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "password123"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -116,10 +133,12 @@
                 "properties": {
                   "email": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "example": "alexboo@ukr.net"
                   },
                   "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password123"
                   }
                 }
               }
@@ -367,7 +386,7 @@
                       "male",
                       "female"
                     ],
-                    "example": "male"
+                    "example": "female"
                   },
                   "weight": {
                     "type": "number",
@@ -429,7 +448,7 @@
                             "male",
                             "female"
                           ],
-                          "example": "male"
+                          "example": "female"
                         },
                         "weight": {
                           "type": "number",
@@ -996,3 +1015,5 @@
     }
   }
 }
+}
+

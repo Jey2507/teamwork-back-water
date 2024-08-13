@@ -3,6 +3,8 @@ tags:
 summary: Logout a user
 operationId: logoutUser
 description: Logs out the user by invalidating the session or token.
+security:
+  - bearerAuth: []
 responses:
   '200':
     description: Successfully logged out

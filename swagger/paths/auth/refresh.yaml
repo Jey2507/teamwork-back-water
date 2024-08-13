@@ -3,6 +3,8 @@ tags:
 summary: Refresh user session
 operationId: refreshUserSession
 description: Refreshes the user's access token using a refresh token.
+security:
+  - bearerAuth: []
 requestBody:
   required: true
   content:
