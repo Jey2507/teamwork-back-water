@@ -7,8 +7,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a documentation of AquaTrack app
 tags:
-  - name: AquaTrack
-    description: Operations about users.
+
   - name: Auth
     description: Auth operations.
   - name: User
