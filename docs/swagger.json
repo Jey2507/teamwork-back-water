@@ -35,7 +35,7 @@
       "description": "Operations about water consumption."
     }
   ],
-  "paths": 
+  "paths":
      {
     "/auth/register": {
       "post": {
@@ -1014,6 +1014,5 @@
       }
     }
   }
-}
 }
 
