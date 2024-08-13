@@ -21,3 +21,14 @@ export const updateUser = async (userId, payload, options = {}) => {
     isNew: Boolean(rawResult?.lastErrorObject?.upserted),
   };
 };
+
+
+// get all users
+export const getAllUsers = async () => {
+  try {
+    const count = await User.countDocuments(); 
+    return count;
+  } catch (error) {
+    throw new Error('Error counting users');
+  }
+};

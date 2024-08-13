@@ -2,6 +2,7 @@ import createHttpError from 'http-errors';
 import { updateUser } from '../services/user.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import {saveFileToUploadDir} from '../utils/saveFileToUploadDir.js';
+import { getAllUsers } from '../services/user.js';
 
 
 // get current user info
@@ -78,4 +79,21 @@ export const patchUserController = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+// get all
+export const getAllUsersController = async ( req, res, next,) => {
+	try {
+	  const allUsers = await getAllUsers();
+
+    console.log(allUsers);
+
+	  res.status(200).json({
+	    status: 200,
+	    message: 'Successfully found all users!',
+	    data: allUsers,
+	  });
+	} catch(err) {
+		next(err);
+	}
 };

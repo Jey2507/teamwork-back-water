@@ -3,18 +3,27 @@ tags:
 summary: Login a user
 operationId: loginUser
 description: Authenticates a user and returns a JWT token.
+security:
+  - bearerAuth: []
 requestBody:
   required: true
   content:
     application/json:
       schema:
         type: object
+        required:
+          - email
+          - password
         properties:
           email:
+            description: "User's email address"
             type: string
             format: email
+            example: "alexboo@ukr.net"
           password:
+            description: "User's password"
             type: string
+            example: "password123"
 responses:
   '200':
     description: Successfully logged in
